@@ -1,0 +1,31 @@
+{
+  "name": "human-nature-api",
+  "version": "1.0.0",
+  "description": "Human Nature backend API",
+  "main": "server.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server",
+    "dev": "nodemon server --exec babel-node src/server.js",
+    "check-formatted": "prettier -c package.json .babelrc server.js \"src/**/!(mock)*.{js,scss}\"",
+    "lint": "eslint --max-warnings 0 server.js \"src/**/*.js\"",
+    "format": "prettier --write package.json .babelrc server.js \"src/**/*.js\"",
+    "format-file": "prettier --write",
+    "is-good": "npm run lint && npm run check-formatted"
+  },
+  "author": "Justin Wright",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/register": "^7.14.5",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2"
+  }
+}
