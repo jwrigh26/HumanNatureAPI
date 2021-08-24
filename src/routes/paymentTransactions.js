@@ -3,6 +3,6 @@ const router = express.Router();
 
 const paymentTransactions = require('../controllers/paymentTransactions');
 
-router.use('/charge-credit-card', paymentTransactions.chargeCreditCard);
+router.route('/charge-credit-card').post(paymentTransactions.chargeCreditCard);
 
 module.exports = router;

@@ -3,9 +3,8 @@ const router = express.Router();
 
 const customerProfiles = require('../controllers/customerProfiles');
 
-router.use(
-  '/create-customer-payment-profile',
-  customerProfiles.createCustomerPaymentProfile
-);
+router
+  .route('/create-customer-payment-profile')
+  .post(customerProfiles.createCustomerPaymentProfile);
 
 module.exports = router;
