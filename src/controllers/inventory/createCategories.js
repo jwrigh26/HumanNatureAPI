@@ -16,4 +16,6 @@ async function createCategory(req, res, next) {
   }
 }
 
-module.exports = createCategory;
+module.exports = {
+  createCategory,
+};
