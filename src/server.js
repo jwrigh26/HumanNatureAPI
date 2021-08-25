@@ -1,6 +1,8 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const colors = require('colors');
+const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('../config/db');
 
 const { env } = require('../src/constants');
@@ -70,7 +72,7 @@ app.use('/api/v1/customer/profiles', customerProfiles);
 app.use('/api/v1/payment/transactions', paymentTransactions);
 app.use('/api/v1/inventory', inventory);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
