@@ -25,6 +25,7 @@ connectDB();
 const customerProfiles = require('./routes/customerProfiles');
 const paymentTransactions = require('./routes/paymentTransactions');
 const inventory = require('./routes/inventory');
+const shop = require('./routes/shop');
 
 const app = express();
 
@@ -71,6 +72,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/v1/customer/profiles', customerProfiles);
 app.use('/api/v1/payment/transactions', paymentTransactions);
 app.use('/api/v1/inventory', inventory);
+app.use('/api/v1/shop', shop);
 
 app.use(errorHandler);
 

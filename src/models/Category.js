@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Channel, Status } = require('../constants');
+const slugify = require('slugify');
 
 const CategorySchema = new mongoose.Schema({
   aliasName: String,
@@ -11,6 +12,7 @@ const CategorySchema = new mongoose.Schema({
   modifiedOn: Date,
   onlineStoreDisplayStatus: Boolean,
   positionNumber: Number,
+  slug: String,
   discountdisplayChannelSettings: [
     {
       channel: {
@@ -51,5 +53,12 @@ const CategorySchema = new mongoose.Schema({
     },
   ],
 });
+
+// Create Category slug from the name
+CategorySchema.pre('save', function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
 
 module.exports = mongoose.model('Category', CategorySchema);

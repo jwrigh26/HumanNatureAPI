@@ -1,41 +1,30 @@
 const express = require('express');
 const router = express.Router();
 
-const inventory = require('../controllers/inventory');
+const categories = require('../controllers/inventory/categories');
+const items = require('../controllers/inventory/items');
 
 // CATEGORY CRUD calls
 
-// Get a category (GET)
-// Update a category (PUT)
-router
-  .route('/categories/:id')
-  .get(inventory.getCategory)
-  .put(inventory.updateCategory)
-  .delete(inventory.deleteCategory);
-
-// Get all categories (GET)
-// Create a category (POST)
 router
   .route('/categories')
-  .get(inventory.getCategories)
-  .post(inventory.createCategory);
+  .get(categories.getCategories)
+  .post(categories.createCategory);
 
+router
+  .route('/categories/:id')
+  .get(categories.getCategory)
+  .put(categories.updateCategory)
+  .delete(categories.deleteCategory);
 
 // ITEM CRUD calls
 
-// Get an item f(GET)
-router.route('items/:id').get(inventory.getItem);
+router.get(items.getItems).post(items.createItem);
 
-// Create an Item (POST)
-router.route('/items').post(inventory.createItem);
-
-// Create multiple Items (POST)
-router.route('/items/batch').post(inventory.createItems);
-
-
-// SPECIAL (S RANK)
-
-// Get all items for a category  (GET)
-router.route('/categories/:categoryId/items').get(inventory.getItems);
+router
+  .route('items/:id')
+  .get(items.getItem)
+  .put(items.updateItem)
+  .delete(items.deleteItem);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Channel, Status } = require('../constants');
+const slugify = require('slugify');
 
 const ItemSchema = new mongoose.Schema({
   aliasName: String,
@@ -22,6 +23,7 @@ const ItemSchema = new mongoose.Schema({
   reorderQty: Number,
   salesTax: Boolean,
   skuNumber: String,
+  slug: String,
   supplierId: String,
   storeQty: Number,
   taxPercentage: Number,
@@ -65,5 +67,11 @@ const ItemSchema = new mongoose.Schema({
     },
   ],
 });
+
+// Create Item slug from the name
+ItemSchema.pre('save', function(next){
+  this.slug = slugify(this.name, { lower: true });
+  next();
+})
 
 module.exports = mongoose.model('Item', ItemSchema);
