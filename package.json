@@ -15,6 +15,7 @@
   "author": "Justin Wright",
   "license": "MIT",
   "dependencies": {
+    "authorizenet": "^1.0.8",
     "axios": "^0.21.1",
     "colors": "^1.4.0",
     "cors": "^2.8.5",

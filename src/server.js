@@ -25,7 +25,7 @@ connectDB();
 const customerProfiles = require('./routes/customerProfiles');
 const paymentTransactions = require('./routes/paymentTransactions');
 const inventory = require('./routes/inventory');
-const shop = require('./routes/shop');
+const merchant = require('./routes/merchant');
 
 const app = express();
 
@@ -36,7 +36,7 @@ app.use(express.json());
 // app.use(cookieParser());
 
 // Dev logging middleware
-if (process.env.NODE_ENV === 'development') {
+if (env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
@@ -72,11 +72,11 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/v1/customer/profiles', customerProfiles);
 app.use('/api/v1/payment/transactions', paymentTransactions);
 app.use('/api/v1/inventory', inventory);
-app.use('/api/v1/shop', shop);
+app.use('/api/v1/merchant', merchant);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   console.log(`Server running in ${env.node_env} mode on port ${PORT}`.yellow.bold);

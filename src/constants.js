@@ -1,5 +1,7 @@
 /* eslint-disable */
 const env = Object.freeze({
+  authLoginId: process.env.AUTH_LOGIN_ID,
+  authTransactionKey: process.env.AUTH_TRANSACTION_KEY,
   port: process.env.PORT || 500,
   node_env: process.env.NODE_ENV,
   mongo_uri: process.env.MONGO_URI
