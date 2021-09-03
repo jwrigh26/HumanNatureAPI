@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const colors = require('colors');
 const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('../config/db');
+const cors = require('cors');
 
 const { env } = require('../src/constants');
 
@@ -63,7 +64,7 @@ if (env.NODE_ENV === 'development') {
 // app.use(hpp());
 
 // Enable CORS
-// app.use(cors());
+app.use(cors());
 
 // Set static folder
 // app.use(express.static(path.join(__dirname, 'public')));

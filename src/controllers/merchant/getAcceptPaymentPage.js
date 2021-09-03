@@ -82,8 +82,8 @@ const acceptPaymentPageWorker = () => {
   });
 };
 
-// @desc FOO
-// @route FOO
+// @desc Call to get a form token from Authorize.Net
+// @route /api/v1/merchant/accept-payment-page
 // @access Public
 const getAcceptPaymentPage = asyncHandler(async (req, res, next) => {
   const { token, request } = await acceptPaymentPageWorker();
