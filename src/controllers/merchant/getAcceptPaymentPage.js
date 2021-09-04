@@ -26,6 +26,10 @@ function transactionRequestType() {
 }
 
 function paymentSettings() {
+  const returnOptions = new ApiContracts.SettingType();
+  returnOptions.setSettingName('hostedPaymentReturnOptions')
+  returnOptions.setSettingValue('{"showReceipt": true}');
+
   const buttonOptions = new ApiContracts.SettingType();
   buttonOptions.setSettingName('hostedPaymentButtonOptions');
   buttonOptions.setSettingValue('{"text": "Pay"}');
@@ -64,12 +68,14 @@ function paymentSettings() {
 
   const paymentSettings = new ApiContracts.ArrayOfSetting();
   paymentSettings.setSetting([
+    returnOptions,
     buttonOptions,
     orderOptions,
     paymentOptions,
     shipping,
     billing,
     customer,
+    iFrameCommunicator,
   ]);
   return paymentSettings;
 }
