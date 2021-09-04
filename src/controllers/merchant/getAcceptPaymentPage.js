@@ -26,16 +26,51 @@ function transactionRequestType() {
 }
 
 function paymentSettings() {
-  const setting1 = new ApiContracts.SettingType();
-  setting1.setSettingName('hostedPaymentButtonOptions');
-  setting1.setSettingValue('{"text": "Pay"}');
+  const buttonOptions = new ApiContracts.SettingType();
+  buttonOptions.setSettingName('hostedPaymentButtonOptions');
+  buttonOptions.setSettingValue('{"text": "Pay"}');
 
-  const setting2 = new ApiContracts.SettingType();
-  setting2.setSettingName('hostedPaymentOrderOptions');
-  setting2.setSettingValue('{"show": false}');
+  const orderOptions = new ApiContracts.SettingType();
+  orderOptions.setSettingName('hostedPaymentOrderOptions');
+  orderOptions.setSettingValue('{"show": false}');
+
+  const paymentOptions = new ApiContracts.SettingType();
+  paymentOptions.setSettingName('hostedPaymentPaymentOptions');
+  paymentOptions.setSettingValue(
+    '{"cardCodeRequired": true, "showBankAccount": false}'
+  );
+
+  const shipping = new ApiContracts.SettingType();
+  shipping.setSettingName('hostedPaymentShippingAddressOptions');
+  shipping.setSettingValue('{"show": true}');
+
+  const billing = new ApiContracts.SettingType();
+  billing.setSettingName('hostedPaymentBillingAddressOptions');
+  billing.setSettingValue('{"show": true}');
+
+  const customer = new ApiContracts.SettingType();
+  customer.setSettingName('hostedPaymentCustomerOptions');
+  customer.setSettingValue('{"showEmail": false}');
+
+  const styles = new ApiContracts.SettingType();
+  styles.setSettingName('hostedPaymentStyleOptions');
+  styles.setSettingValue('{"bgColor": "#9E9E9E"}');
+
+  const iFrameCommunicator = new ApiContracts.SettingType();
+  iFrameCommunicator.setSettingName('hostedPaymentIFrameCommunicatorUrl');
+  iFrameCommunicator.setSettingValue(
+    '{"url": "https://localhost:8080//iFrameCommunicator.html"}'
+  );
 
   const paymentSettings = new ApiContracts.ArrayOfSetting();
-  paymentSettings.setSetting([setting1, setting2]);
+  paymentSettings.setSetting([
+    buttonOptions,
+    orderOptions,
+    paymentOptions,
+    shipping,
+    billing,
+    customer,
+  ]);
   return paymentSettings;
 }
 
