@@ -26,7 +26,7 @@ connectDB();
 const customerProfiles = require('./routes/customerProfiles');
 const paymentTransactions = require('./routes/paymentTransactions');
 const inventory = require('./routes/inventory');
-const merchant = require('./routes/merchant');
+const acceptSuite = require('./routes/acceptSuite');
 
 const app = express();
 
@@ -64,7 +64,7 @@ if (env.NODE_ENV === 'development') {
 // app.use(hpp());
 
 // Enable CORS
-app.use(cors());
+// app.use(cors());
 
 // Set static folder
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -73,7 +73,7 @@ app.use(cors());
 app.use('/api/v1/customer/profiles', customerProfiles);
 app.use('/api/v1/payment/transactions', paymentTransactions);
 app.use('/api/v1/inventory', inventory);
-app.use('/api/v1/merchant', merchant);
+app.use('/api/v1/accept-suite', acceptSuite);
 
 app.use(errorHandler);
 

@@ -46,11 +46,11 @@ function paymentSettings() {
 
   const shipping = new ApiContracts.SettingType();
   shipping.setSettingName('hostedPaymentShippingAddressOptions');
-  shipping.setSettingValue('{"show": true}');
+  shipping.setSettingValue('{"show": false}');
 
   const billing = new ApiContracts.SettingType();
   billing.setSettingName('hostedPaymentBillingAddressOptions');
-  billing.setSettingValue('{"show": true}');
+  billing.setSettingValue('{"show": false}');
 
   const customer = new ApiContracts.SettingType();
   customer.setSettingName('hostedPaymentCustomerOptions');
