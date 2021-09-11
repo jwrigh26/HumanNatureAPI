@@ -13,7 +13,7 @@ function transactionRequestType(body) {
     billTo: billToInfo,
     duty: dutyValue,
     lineItems: lineItemList,
-    nonce: nonceValue,
+    nonce,
     order,
     shipping: shippingInfo,
     shipTo: shipToInfo,
@@ -22,8 +22,8 @@ function transactionRequestType(body) {
 
   function paymentType() {
     const opaque = new ApiContracts.OpaqueDataType();
-    opaque.setDataDescriptor('COMMON.ACCEPT.INAPP.PAYMENT');
-    opaque.setDataValue(nonceValue);
+    opaque.setDataDescriptor(nonce.description);
+    opaque.setDataValue(nonce.value);
 
     const payment = new ApiContracts.PaymentType();
     payment.setOpaqueData(opaque);
