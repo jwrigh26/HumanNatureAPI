@@ -27,6 +27,7 @@ const customerProfiles = require('./routes/customerProfiles');
 const paymentTransactions = require('./routes/paymentTransactions');
 const inventory = require('./routes/inventory');
 const acceptSuite = require('./routes/acceptSuite');
+const foo = require('./routes/foo');
 
 const app = express();
 
@@ -74,13 +75,16 @@ app.use('/api/v1/customer/profiles', customerProfiles);
 app.use('/api/v1/payment/transactions', paymentTransactions);
 app.use('/api/v1/inventory', inventory);
 app.use('/api/v1/accept-suite', acceptSuite);
+app.use('/api/v1/foo', foo);
 
 app.use(errorHandler);
 
 const PORT = env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running in ${env.node_env} mode on port ${PORT}`.yellow.bold);
+  console.log(
+    `Server running in ${env.node_env} mode on port ${PORT}`.yellow.bold
+  );
 });
 
 // Handle unhandled promise rejections
@@ -89,5 +93,3 @@ process.on('unhandledRejection', (err) => {
   // close server & exit process
   server.close(() => process.exit(1));
 });
-
-

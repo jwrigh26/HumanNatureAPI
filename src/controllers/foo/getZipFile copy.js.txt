@@ -1,0 +1,90 @@
+const axios = require('axios').default;
+const { env } = require('../../constants');
+const ErrorResponse = require('../../utils/errorResponse');
+const asyncHandler = require('../../middleware/async');
+const https = require('https');
+
+const path = require('path');
+const fs = require('fs');
+const JSZip = require('jszip');
+
+const AdmZip = require('adm-zip');
+
+// @desc Call to get a zip file
+// @route /api/v1/foo/zip
+// @access Public
+const getAcceptPaymentPage = asyncHandler(async (req, res, next) => {
+  const url = 'https://justinwright-a5b15.web.app/foo.zip';
+  const id = 'RGAXiK9XOuUtB3AYSi71ZnbSpa7ERh9m';
+
+  const dirPath = path.join(__dirname, '../../temp/');
+  // const zip = 'documents.zip';
+
+  let tmpZipStream = fs.createWriteStream('foo.zip');
+  let request = https.get(url, function (response) {
+    response.pipe(tmpZipStream);
+  });
+
+  tmpZipStream.on('close', function () {
+    try {
+      const zip = new AdmZip('foo.zip');
+      const zipEntries = zip.getEntries(); // an array of ZipEntry records
+      zipEntries.forEach(function (zipEntry) {
+        console.log(zipEntry.entryName); // outputs zip entries information
+      });
+      zip.extractAllTo(dirPath);
+    } catch (e) {
+      console.log('Can not create zip, bad data', e);
+    }
+  });
+
+  let response = null;
+  try {
+    // response = await axios.get(url, {
+    //   headers: {
+    //     Accept: 'application/zip',
+    //   },
+    //   responseType: 'arraybuffer',
+    // });
+    // fs.writeFile(`${dirPath}/${zip}`, response.data, (err) => {
+    //   if (err) throw err;
+    //   console.log('success');
+    // });
+    // fs.readFile(`${dirPath}/${zip}`, function (err, data) {
+    //   if (!err) {
+    //     const zip = new JSZip();
+    //     zip.loadAsync(data).then(function (contents) {
+    //       Object.keys(contents.files).forEach(function (filename) {
+    //         console.log('File:', filename);
+    //         // zip
+    //         //   .file(filename)
+    //         //   .async('nodebuffer')
+    //         //   .then(function (content) {
+    //         //     fs.writeFileSync(`${dirPath}/`, content);
+    //         //     console.log('FILENAME: ', filename);
+    //         //   });
+    //       });
+    //     });
+    //   }
+    // });
+    // const zip = new AdmZip(`${dirPath}/${zip}`);
+    // const zipEntries = zip.getEntries(); // an array of ZipEntry records
+    // zipEntries.forEach(function (zipEntry) {
+    //   console.log(zipEntry); // outputs zip entries information
+    //   // if (zipEntry.entryName == 'my_file.txt') {
+    //   //   console.log(zipEntry.getData().toString('utf8'));
+    //   // }
+    // });
+    // console.log(response.data);
+  } catch (error) {
+    console.log('ZIP ERROR: ', error);
+    new ErrorResponse('SOMETHING BAD HAPPENED');
+  }
+
+  res.status(200).json({
+    result: { success: true },
+    error: null,
+  });
+});
+
+module.exports = getAcceptPaymentPage;
