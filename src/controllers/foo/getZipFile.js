@@ -1,66 +1,72 @@
-const ErrorResponse = require('../../utils/errorResponse');
 const asyncHandler = require('../../middleware/async');
-const https = require('https');
 const AdmZip = require('adm-zip');
-const path = require('path');
-const fs = require('fs');
 const util = require('util');
-const stream = require('stream');
-const { pipeline } = require('stream');
+const request = require('request');
+const { jobNimbusApi } = require('../../utils/api');
+
+const ErrorResponse = require('../../utils/errorResponse');
+
+const getRequest = util.promisify(request.get);
+
+const api = jobNimbusApi();
+
+const handleCreateFile = async (payload, index) => {
+  const response = await api.createFile(payload);
+  if (response.status !== 200) {
+    return next(new ErrorResponse('JobNimbus null response received.', 400));
+  }
+
+  return { status: response.status, data: response.data };
+};
 
 // @desc Call to get a zip file
 // @route /api/v1/foo/zip
 // @access Public
 const getAcceptPaymentPage = asyncHandler(async (req, res, next) => {
   const url = 'https://justinwright-a5b15.web.app/foo.zip';
-  const id = 'RGAXiK9XOuUtB3AYSi71ZnbSpa7ERh9m';
-  const zipPath = path.join(__dirname, '../../temp/boo.zip');
-  const tempPath = path.join(__dirname, '../../temp/');
 
-  let fileNames = [];
+  const { body } = await getRequest({ url, encoding: null });
 
-  const response = await makeRequest(url);
+  let zip = new AdmZip(body);
+  let zipEntries = zip.getEntries();
 
-  const writeStream = fs.createWriteStream(zipPath);
+  // fake id
+  const jnid = 'kvlp9ir0nrbwsvexrric848';
 
-  writeStream.on('close', function () {
-    try {
-      const zip = new AdmZip(zipPath);
-      const zipEntries = zip.getEntries(); // an array of ZipEntry records
-      zipEntries.forEach(function (zipEntry) {
-        fileNames.push(zipEntry.entryName);
-      });
-      zip.extractAllTo(tempPath);
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  const fileNames = zipEntries.map((entry) => entry.entryName);
 
-  await pipeline(response, writeStream, (e) => {
-    console.log('Pipeline finished', e);
-    res.status(200).json({
-      result: { success: true, fileNames, path: tempPath },
-      error: null,
-    });
+  const payloads = zipEntries.reduce((list, entry) => {
+    // Pull decompressedData from zip by name
+    const data = zip.readFile(entry.entryName);
+
+    // Assemble payloads
+    return [
+      ...list,
+      {
+        data: Buffer.from(data).toString('base64'),
+        is_private: false,
+        related: [jnid],
+        type: 1,
+        subtype: 'contact',
+        filename: entry.entryName,
+        date: Date.now(),
+        persist: true,
+      },
+    ];
+  }, []);
+
+  // Create fns to use in Promise all
+  const workers = payloads.reduce((list, payload, index) => {
+    const worker = handleCreateFile(payload, index);
+    return [...list, worker];
+  }, []);
+
+  const values = await Promise.all(workers);
+
+  res.status(200).json({
+    result: { success: true, fileNames, values },
+    error: null,
   });
 });
-
-function makeRequest(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      const { statusCode } = res;
-
-      if (statusCode === 200) {
-        console.log('Yes');
-        resolve(res);
-      }
-
-      const error = new Error(
-        'Request Failed.\n' + `Status Code: ${statusCode}`
-      );
-      reject(error);
-    });
-  });
-}
 
 module.exports = getAcceptPaymentPage;
